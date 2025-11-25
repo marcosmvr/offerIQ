@@ -13,11 +13,10 @@ model User {
   name         String
   role         Role   @default(GESTOR)
 
-  // offers
+  offers Offer[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
-  offers    Offer[]
 
   @@map("users")
 }
@@ -42,11 +41,10 @@ model Offer {
   description   String?       @db.Text
   status        OfferStatus   @default(ACTIVE)
   metrics       OfferMetrics?
-  // reports
+  reports       AIReport[]
 
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @default(now()) @map("updated_at")
-  aireports AIReport[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
 
   @@index([userId])
   @@index([niche])
