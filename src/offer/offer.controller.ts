@@ -45,16 +45,16 @@ export class OfferController {
     return this.offerService.findById(id, userId)
   }
 
-  /* @Patch('/:id')
+  @Patch('/:id')
   @HttpCode(200)
-  @UsePipes(new ZodValidationPipe(UpdateOfferSchema))
   async update(
     @Param('id') id: string,
-    @Body() updateOfferSchema: UpdateOfferSchema,
+    @Body(new ZodValidationPipe(UpdateOfferSchema))
+    updateOfferSchema: UpdateOfferSchema,
     @Req() req: any,
   ) {
     const userId = 'temp-uuid'
 
     return this.offerService.updateById(id, userId, updateOfferSchema)
-  } */
+  }
 }

@@ -8,8 +8,12 @@ import {
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({
+      bodyLimit: 10485760,
+    }),
   )
+
+  
 
   await app.listen(3000)
 }
