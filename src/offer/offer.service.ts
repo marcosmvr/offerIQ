@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateOfferSchema } from './schema/create-offer.schema'
+import { UpdateOfferSchema } from './schema/update-offer.schema'
 
 @Injectable()
 export class OfferService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data) {
+  async create(data: CreateOfferSchema & { userId: string }) {
     return await this.prisma.offer.create({
       data,
       include: { metrics: true },
@@ -32,7 +34,7 @@ export class OfferService {
     return offer
   }
 
-  async updateById(id: string, userId: string, data) {
+  async updateById( id: string, userId: string, data: UpdateOfferSchema) {
     const offerCheck = await this.prisma.offer.findFirst({
       where: { id, userId },
     })
