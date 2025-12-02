@@ -1,26 +1,32 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common'
-import { PrismaService } from 'src/prisma/prisma.service'
 import { CreateBenchmarkSchema } from './schemas/create-benchmarks.schema'
 import { BenchmarkFiltersSchema } from './schemas/benchmarks-filter.schema'
 import { UpdateBenchmarkSchema } from './schemas/update-benchmarks.schemas'
+import {
+  BENCHMARK_REPOSITORY,
+  type IBenchmarkRepository,
+} from './repositories/benchmark.repository.interface'
 
 @Injectable()
 export class BenchmarkService {
   private readonly logger = new Logger(BenchmarkService.name)
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(BENCHMARK_REPOSITORY)
+    private readonly benchmarkRepository: IBenchmarkRepository,
+  ) {}
 
-  async create(data: CreateBenchmarkSchema) {
+  async create(data: unknown) {
     try {
-      const benchmark = await this.prisma.benchmark.create({
-        data,
-      })
+      const validatedData = CreateBenchmarkSchema.parse(data)
+      const benchmark = await this.benchmarkRepository.create(validatedData)
 
       this.logger.log(`Benchmark criado: ${benchmark.id}`)
       return benchmark
@@ -29,19 +35,11 @@ export class BenchmarkService {
     }
   }
 
-  async findAll(filters: BenchmarkFiltersSchema) {
+  async findAll(filters: unknown) {
     try {
-      const where = {
-        ...(filters.niche && { niche: filters.niche }),
-        ...(filters.country && { country: filters.country }),
-        ...(filters.trafficSource && { trafficSource: filters.trafficSource }),
-        ...(filters.funnelType && { funnelType: filters.funnelType }),
-      }
-
-      const benchmarks = await this.prisma.benchmark.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-      })
+      const validatedFilters = BenchmarkFiltersSchema.parse(filters)
+      const benchmarks =
+        await this.benchmarkRepository.findAll(validatedFilters)
 
       return { benchmarks }
     } catch (error) {
@@ -52,9 +50,7 @@ export class BenchmarkService {
 
   async findById(id: string) {
     try {
-      const benchmark = await this.prisma.benchmark.findUnique({
-        where: { id },
-      })
+      const benchmark = await this.benchmarkRepository.findById(id)
 
       if (!benchmark) {
         throw new NotFoundException('Benchmark não encontrado.')
@@ -69,12 +65,13 @@ export class BenchmarkService {
     }
   }
 
-  async updateById(id: string, data: UpdateBenchmarkSchema) {
+  async updateById(id: string, data: unknown) {
     try {
-      const benchmark = await this.prisma.benchmark.update({
-        where: { id },
-        data,
-      })
+      const validatedData = UpdateBenchmarkSchema.parse(data)
+      const benchmark = await this.benchmarkRepository.updateById(
+        id,
+        validatedData,
+      )
 
       this.logger.log(`Benchmark ${id} atualizado`)
       return benchmark
@@ -88,9 +85,7 @@ export class BenchmarkService {
 
   async deleteById(id: string) {
     try {
-      await this.prisma.benchmark.delete({
-        where: { id },
-      })
+      await this.benchmarkRepository.deleteById(id)
 
       this.logger.log(`Benchmark ${id} deletado`)
       return { message: 'Benchmark deletado com sucesso' }
@@ -105,7 +100,6 @@ export class BenchmarkService {
   private handleDatabaseError(error: unknown, operation: string): never {
     const errorCode = error?.['code']
 
-    // P2002: Unique constraint violation
     if (errorCode === 'P2002') {
       throw new ConflictException(
         'Já existe um benchmark com esta combinação de parâmetros.',
