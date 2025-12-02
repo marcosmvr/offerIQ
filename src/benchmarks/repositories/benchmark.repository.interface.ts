@@ -9,3 +9,5 @@ export interface IBenchmarkRepository {
   updateById(id: string, data: UpdateBenchmarkSchema): Promise<Benchmark>
   deleteById(id: string): Promise<void>
 }
+
+export const BENCHMARK_REPOSITORY = Symbol('BENCHMARK_REPOSITORY')
