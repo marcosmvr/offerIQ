@@ -5,16 +5,18 @@ import {
   InternalServerErrorException,
   Logger,
   BadRequestException,
+  Inject,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { PrismaService } from '../prisma/prisma.service'
 import { hash, compare } from 'bcrypt'
-import { User } from '@prisma/client'
 import { ZodError } from 'zod'
 import { CreateUserSchema } from './schema/create-user.schema'
 import { SignInUserSchema } from './schema/login-user.schema'
-import type { IAuthRepository } from './repositories/auth.repository.interface'
+import {
+  AUTH_REPOSITORY,
+  type IAuthRepository,
+} from './repositories/auth.repository.interface'
 
 export interface AuthResponse {
   access_token: string
@@ -27,6 +29,7 @@ export class AuthService {
   private readonly saltRounds: number
 
   constructor(
+    @Inject(AUTH_REPOSITORY)
     private readonly authRepository: IAuthRepository,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
@@ -34,7 +37,7 @@ export class AuthService {
     const saltRounds = this.config.get<number>('BCRYPT_SALT_ROUNDS', 10)
   }
 
-  async create(data: unknown): Promise<User> {
+  async create(data: unknown) {
     try {
       const validatedData = CreateUserSchema.parse(data)
       const { email, password, name, role } = validatedData
@@ -116,7 +119,7 @@ export class AuthService {
     }
   }
 
-  private async findUserByEmail(email: string): Promise<User> {
+  private async findUserByEmail(email: string) {
     const user = await this.authRepository.findByEmail(email)
 
     if (!user) {
