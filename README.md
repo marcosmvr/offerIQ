@@ -479,24 +479,6 @@ Authorization: Bearer <seu-token>
 
 ---
 
-## 🚀 Deploy
-
-### Opções recomendadas
-
-- **Railway:** Deploy automático via GitHub
-- **Render:** Free tier com PostgreSQL incluído
-- **Vercel:** Ideal para serverless
-- **AWS EC2:** Controle total
-
-### Configuração de produção
-
-1. Configure variáveis de ambiente na plataforma
-2. Rode migrations: `npx prisma migrate deploy`
-3. Build do projeto: `npm run build`
-4. Inicie: `npm run start:prod`
-
----
-
 ## 🤝 Contribuindo
 
 Contribuições são bem-vindas! Para contribuir:
