@@ -4,12 +4,13 @@ import { Prisma, Benchmark } from '@prisma/client'
 import { BenchmarkFiltersSchema } from '../schemas/benchmarks-filter.schema'
 import { UpdateBenchmarkSchema } from '../schemas/update-benchmarks.schemas'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateBenchmarkSchema } from '../schemas/create-benchmarks.schema'
 
 @Injectable()
 export class BenchmarkRepository implements IBenchmarkRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: Prisma.BenchmarkCreateInput): Promise<Benchmark> {
+  async create(data: CreateBenchmarkSchema): Promise<Benchmark> {
     return this.prisma.benchmark.create({ data })
   }
 
