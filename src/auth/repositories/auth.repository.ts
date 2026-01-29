@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../prisma/prisma.service'
 import { Prisma, User } from '@prisma/client'
 import { IAuthRepository } from './auth.repository.interface'
+import { CreateUserSchema } from '../schema/create-user.schema'
 
 @Injectable()
 export class AuthRepository implements IAuthRepository {
@@ -27,7 +28,7 @@ export class AuthRepository implements IAuthRepository {
     return !!user
   }
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
+  async create(data: CreateUserSchema): Promise<User> {
     return this.prisma.user.create({
       data,
     })

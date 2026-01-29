@@ -40,11 +40,11 @@ export class AuthService {
   async create(data: unknown) {
     try {
       const validatedData = CreateUserSchema.parse(data)
-      const { email, password, name, role } = validatedData
+      const { email, passwordHash, name, role } = validatedData
 
       await this.checkEmailExists(email)
 
-      const hashedPassword = await this.hashPassword(password)
+      const hashedPassword = await this.hashPassword(passwordHash)
 
       const user = await this.authRepository.create({
         email,
