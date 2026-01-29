@@ -1,33 +1,36 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common'
-import { PrismaService } from 'src/prisma/prisma.service'
 import { CreateMetricsSchema } from './schemas/create-metric.schema'
 import { Decimal } from '@prisma/client/runtime/client'
+import {
+  type IMetricsRepository,
+  METRICS_REPOSITORY,
+} from './repositories/metrics.repository.interface'
 
 @Injectable()
 export class MetricsService {
   private readonly logger = new Logger(MetricsService.name)
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @Inject(METRICS_REPOSITORY)
+    private readonly metricsRepository: IMetricsRepository,
+  ) {}
 
-  async upsert(offerId: string, userId: string, data: CreateMetricsSchema) {
+  async upsert(offerId: string, data: CreateMetricsSchema) {
     try {
-      await this.verifyOfferOwnership(offerId, userId)
+      const validatedData = CreateMetricsSchema.parse(data)
 
-      const calculatedData = this.calculateMetrics(data)
+      const calculatedData = this.calculateMetrics(validatedData)
 
-      const metrics = await this.prisma.offerMetrics.upsert({
-        where: { offerId },
-        create: {
-          offerId,
-          ...calculatedData,
-        },
-        update: calculatedData,
-      })
+      const metrics = await this.metricsRepository.upsert(
+        offerId,
+        calculatedData,
+      )
 
       this.logger.log(`Métricas atualizadas para oferta ${offerId}`)
       return metrics
@@ -46,9 +49,7 @@ export class MetricsService {
     try {
       await this.verifyOfferOwnership(offerId, userId)
 
-      const metrics = await this.prisma.offerMetrics.findUnique({
-        where: { offerId },
-      })
+      const metrics = await this.metricsRepository.findByOfferId(offerId)
 
       if (!metrics) {
         throw new NotFoundException(
@@ -100,10 +101,7 @@ export class MetricsService {
   }
 
   private async verifyOfferOwnership(offerId: string, userId: string) {
-    const offer = await this.prisma.offer.findFirst({
-      where: { id: offerId, userId },
-      select: { id: true },
-    })
+    const offer = await this.metricsRepository.offerExists(offerId, userId)
 
     if (!offer) {
       throw new NotFoundException('Oferta não encontrada ou acesso negado.')

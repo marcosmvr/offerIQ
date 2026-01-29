@@ -45,6 +45,6 @@ export class MetricsController {
       throw new BadRequestException('ID da oferta inválido.')
     }
 
-    return await this.metricsService.upsert(offerId, userId, data)
+    return await this.metricsService.upsert(offerId, data)
   }
 }
