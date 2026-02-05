@@ -3,7 +3,7 @@ import z from 'zod'
 export const CreateBenchmarkSchema = z
   .object({
     niche: z.string().min(2, 'Nicho é obrigatório'),
-    country: z.string().length(3, 'País deve ter 3 letras (ex: BRA, USA)'),
+    country: z.string().length(2, 'País deve ter 2 letras (ex: BR, US)'),
     trafficSource: z.string().min(2, 'Fonte de tráfego é obrigatória'),
     funnelType: z.string().min(2, 'Tipo de funil é obrigatório'),
     metricName: z.enum([
