@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 @Injectable()
 export class AiRateLimitService {
   private readonly requests = new Map<string, number[]>()
-  private readonly LIMIT = 1
+  private readonly LIMIT = 5
   private readonly WINDOW = 60 * 60 * 1000 // 1h
 
   canAnalyze(userId: string): boolean {
