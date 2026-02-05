@@ -34,17 +34,17 @@ export class AuthService {
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
   ) {
-    const saltRounds = this.config.get<number>('BCRYPT_SALT_ROUNDS', 10)
+    this.saltRounds = Number(this.config.get<number>('BCRYPT_SALT_ROUNDS', 10))
   }
 
   async create(data: unknown) {
     try {
       const validatedData = CreateUserSchema.parse(data)
-      const { email, passwordHash, name, role } = validatedData
+      const { email, password, name, role } = validatedData
 
       await this.checkEmailExists(email)
 
-      const hashedPassword = await this.hashPassword(passwordHash)
+      const hashedPassword = await this.hashPassword(password)
 
       const user = await this.authRepository.create({
         email,
