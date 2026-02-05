@@ -3,7 +3,7 @@ import { CreateOfferSchema } from '../schema/create-offer.schema'
 import { UpdateOfferSchema } from '../schema/update-offer.schema'
 
 export interface IOfferRepository {
-  create(data: CreateOfferSchema, userId: string): Promise<Offer>
+  create(data: CreateOfferSchema & { userId: string }): Promise<Offer>
   findByUserId(userId: string): Promise<Offer[]>
   findByOfferId(id: string, userId: string): Promise<Offer | null>
   updateById(

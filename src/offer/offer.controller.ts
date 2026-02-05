@@ -29,7 +29,7 @@ export class OfferController {
     @Body(new ZodValidationPipe(CreateOfferSchema)) data: CreateOfferSchema,
     @CurrentUser('id') userId: string,
   ) {
-    return await this.offerService.create({ ...data, userId })
+    return await this.offerService.create(data, userId)
   }
 
   @Get()

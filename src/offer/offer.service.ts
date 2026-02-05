@@ -26,7 +26,10 @@ export class OfferService {
 
   async create(data: CreateOfferSchema, userId: string) {
     try {
-      const offer = await this.offersRepository.create(data, userId)
+      const offer = await this.offersRepository.create({
+        ...data,
+        userId,
+      })
       this.logger.log(`Oferta ${offer.id} criada`)
       return offer
     } catch (error) {

@@ -10,8 +10,15 @@ export class OffersRepository implements IOfferRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateOfferSchema & { userId: string }): Promise<Offer> {
+    const { userId, ...offerData } = data
+
     return this.prisma.offer.create({
-      data,
+      data: {
+        ...offerData,
+        user: {
+          connect: { id: userId },
+        },
+      },
       include: { metrics: true },
     })
   }
