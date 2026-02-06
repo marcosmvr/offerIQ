@@ -1,520 +1,223 @@
-# 📊 OfferIQ - Sistema Inteligente de Análise de Ofertas de Marketing
+# Aivo
 
-> Plataforma backend para análise automatizada de campanhas de marketing digital com IA, benchmarking inteligente e geração de insights acionáveis.
+API REST para análise automatizada de campanhas de marketing digital usando Google Gemini.
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)](https://www.prisma.io/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-
----
-
-## 🎯 Sobre o Projeto
-
-**OfferIQ** é uma API REST completa que permite gestores de tráfego e marketing digital:
-
-- 📈 **Cadastrar campanhas** com dados estruturados (nicho, país, funil, métricas)
-- 🤖 **Gerar análises automáticas com IA** usando Google Gemini
-- 📊 **Comparar performance** com benchmarks de mercado por nicho/país
-- 🎯 **Receber planos de ação** priorizados e específicos
-- 📉 **Identificar gargalos** em cada etapa do funil
-- 📚 **Manter histórico completo** de ofertas e relatórios
-
-### 💼 Por que este projeto é relevante?
-
-```
-✅ Integração real com IA (Google Gemini API)
-✅ Autenticação e autorização (JWT + RBAC)
-✅ CRUD completo com relacionamentos complexos
-✅ Lógica de negócio não-trivial (cálculos, comparações)
-✅ TypeScript com tipagem forte
-✅ Arquitetura escalável (Services, Controllers, Middlewares)
-✅ Validação robusta com Zod
-✅ ORM moderno (Prisma)
-```
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat-square&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 ---
 
-## 🚀 Funcionalidades
+## O que é?
 
-### Para Gestores de Tráfego:
+Aivo permite que gestores de tráfego cadastrem suas campanhas, comparem métricas com benchmarks de mercado e recebam análises detalhadas geradas por IA. A API identifica gargalos, sugere otimizações e mantém histórico completo de performance.
 
-- ✅ CRUD completo de ofertas (campanhas)
-- ✅ Registro de métricas de performance (CTR, ROAS, conversão)
-- ✅ Cálculo automático de métricas derivadas (CPC, CPM, AOV)
-- ✅ Geração de análise com IA em segundos
-- ✅ Visualização de benchmarks de mercado
-- ✅ Histórico de relatórios com comparações
+**Problema resolvido:** Gestores perdem tempo analisando dados manualmente e comparando performance com médias de mercado. Aivo automatiza isso.
 
-### Para Administradores:
+## Principais recursos
 
-- ✅ Todas as funcionalidades de gestores
-- ✅ Gerenciamento de benchmarks (criar, editar, deletar)
-- ✅ Acesso a dados de todos os usuários
+- Autenticação JWT com controle de permissões (gestores e administradores)
+- CRUD completo de campanhas com métricas de performance
+- Cálculo automático de métricas derivadas (CTR, CPC, CPM, ROAS, AOV)
+- Análise com Google Gemini comparando dados reais vs benchmarks
+- Sistema de benchmarks configurável por nicho, país e fonte de tráfego
+- Histórico de análises e relatórios
 
-### Análise com IA (Google Gemini):
+## Por que este stack?
 
-A IA analisa suas campanhas e retorna:
+- **NestJS**: Arquitetura escalável com injeção de dependências nativa
+- **Prisma**: Type-safety completo do banco até a aplicação
+- **Zod**: Validação runtime que complementa a tipagem do TypeScript
+- **PostgreSQL**: Relacionamentos complexos entre ofertas, métricas e análises
+- **Google Gemini**: Análise contextual que considera histórico e benchmarks
 
-- 📋 **Resumo executivo** da performance
-- ✅ **Status de validação** (validada, não validada, próxima da validação)
-- 🚨 **Gargalos identificados** por etapa (tráfego, funil, checkout)
-- 🎯 **Plano de ação priorizado** com impacto esperado
-- 📊 **Comparação detalhada** com benchmarks de mercado
-- 💡 **Recomendações estratégicas** baseadas em histórico
-
----
-
-## 🏗️ Arquitetura
+## Stack técnica
 
 ```
-┌──────────────┐
-│   Cliente    │  (Frontend/Postman)
-└──────┬───────┘
-       │ HTTP/JSON
-       ▼
-┌──────────────────────────────────┐
-│      NestJS API (Backend)        │
-│                                  │
-│  ┌────────────────────────────┐ │
-│  │    Auth Middleware         │ │
-│  │    (JWT Validation)        │ │
-│  └────────────┬───────────────┘ │
-│               ▼                  │
-│  ┌────────────────────────────┐ │
-│  │      Controllers           │ │
-│  │  (Offers, Metrics, etc)    │ │
-│  └────────────┬───────────────┘ │
-│               ▼                  │
-│  ┌────────────────────────────┐ │
-│  │       Services             │ │
-│  │  (Business Logic)          │ │
-│  └─────┬──────────────┬───────┘ │
-└────────┼──────────────┼─────────┘
-         │              │
-         ▼              ▼
-   ┌─────────┐   ┌──────────────┐
-   │ Prisma  │   │Google Gemini │
-   │   ORM   │   │     API      │
-   └────┬────┘   └──────────────┘
-        │
-        ▼
-┌──────────────┐
-│  PostgreSQL  │
-│  (Supabase)  │
-└──────────────┘
+Backend:     NestJS + TypeScript
+Database:    PostgreSQL (Supabase)
+ORM:         Prisma
+Auth:        JWT (jsonwebtoken + bcrypt)
+Validation:  Zod
+AI:          Google Gemini API
 ```
 
-### Fluxo de Análise com IA
+## Começando
 
-```
-1. Cliente envia POST /offers/:id/analyze
-           ↓
-2. Backend busca: Oferta + Métricas + Benchmarks + Histórico
-           ↓
-3. Monta contexto estruturado em JSON
-           ↓
-4. Envia prompt para Google Gemini API
-           ↓
-5. IA retorna análise estruturada (JSON)
-           ↓
-6. Backend valida, parseia e salva no banco
-           ↓
-7. Retorna relatório completo para o cliente
-```
+### Requisitos
 
----
+- Node.js 20+
+- Conta no Supabase (ou PostgreSQL rodando localmente)
+- Google Gemini API key ([obter aqui](https://makersuite.google.com/app/apikey))
 
-## 🛠️ Stack Tecnológica
-
-### Backend
-
-- **Runtime:** Node.js 20+
-- **Framework:** NestJS
-- **Linguagem:** TypeScript
-- **ORM:** Prisma
-- **Banco:** PostgreSQL (Supabase)
-- **Autenticação:** JWT (jsonwebtoken + bcrypt)
-- **Validação:** Zod
-- **IA:** Google Gemini API (`@google/generative-ai`)
-
-### Principais Dependências
-
-```json
-{
-  "@nestjs/common": "^10.0.0",
-  "@nestjs/core": "^10.0.0",
-  "@nestjs/config": "^3.0.0",
-  "@prisma/client": "^5.7.1",
-  "bcrypt": "^5.1.1",
-  "jsonwebtoken": "^9.0.2",
-  "zod": "^3.22.4",
-  "@google/generative-ai": "^0.1.3",
-  "passport-jwt": "^4.0.1"
-}
-```
-
----
-
-## 📦 Instalação e Configuração
-
-### Pré-requisitos
-
-- Node.js 20+ instalado
-- Conta no [Supabase](https://supabase.com) (ou PostgreSQL local)
-- API Key do [Google Gemini](https://makersuite.google.com/app/apikey)
-
-### 1. Clone o repositório
+### Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/offeriq-backend.git
-cd offeriq-backend
-```
+# Clone o repositório
+git clone https://github.com/marcosmvr/aivo.git
+cd aivo
 
-### 2. Instale as dependências
-
-```bash
+# Instale as dependências
 npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
+
+# Execute as migrations
+npx prisma migrate dev
+
+# (Opcional) Popule benchmarks iniciais
+npx prisma db seed
+
+# Inicie o servidor
+npm run start:dev
 ```
 
-### 3. Configure as variáveis de ambiente
+O servidor estará disponível em `http://localhost:3000`
 
-Crie um arquivo `.env` na raiz do projeto:
+## Variáveis de ambiente
 
 ```env
-# Database (Supabase PostgreSQL)
-DATABASE_URL="postgresql://user:password@host:5432/database?schema=public"
+# Database
+DATABASE_URL="postgresql://user:password@host:5432/database"
 
 # JWT
-JWT_SECRET="seu-segredo-super-secreto-aqui"
+JWT_SECRET="seu-secret-aqui"
 JWT_EXPIRATION="15m"
-JWT_REFRESH_SECRET="outro-segredo-para-refresh"
-JWT_REFRESH_EXPIRATION="7d"
 
-# Google Gemini API
-GEMINI_API_KEY="sua-api-key-do-gemini"
+# Google Gemini
+GEMINI_API_KEY="sua-api-key"
 
 # Server
 PORT=3000
 NODE_ENV="development"
-
-# Bcrypt
-BCRYPT_SALT_ROUNDS=10
 ```
 
-### 4. Configure o banco de dados
+## Documentação da API
 
-```bash
-# Gerar cliente Prisma
-npx prisma generate
-
-# Rodar migrations
-npx prisma migrate dev --name init
-
-# (Opcional) Popular benchmarks iniciais
-npx prisma db seed
-```
-
-### 5. Inicie o servidor
-
-```bash
-# Desenvolvimento (com hot reload)
-npm run start:dev
-
-# Produção
-npm run build
-npm run start:prod
-```
-
-O servidor estará rodando em `http://localhost:3000`
-
----
-
-## 📚 Documentação da API
-
-A documentação completa da API está disponível via **Swagger** após iniciar o servidor:
-
-```
-http://localhost:3000/api/docs
-```
-
-### Recursos Principais
-
-- **Auth:** Registro, login e gerenciamento de tokens
-- **Offers:** CRUD completo de ofertas/campanhas
-- **Metrics:** Criação e atualização de métricas (com cálculos automáticos)
-- **Benchmarks:** Gerenciamento de referências de mercado (admin apenas)
-- **Reports:** Geração de análises com IA e histórico de relatórios
+Acesse `http://localhost:3000/docs` para a documentação Swagger completa com exemplos de requisições.
 
 ### Autenticação
 
-Todas as rotas (exceto `/auth/register` e `/auth/signin`) exigem JWT:
+Todas as rotas (exceto registro e login) requerem token JWT no header:
 
 ```
-Authorization: Bearer <seu-token-jwt>
+Authorization: Bearer {seu-token}
 ```
 
----
+### Fluxo básico de uso
 
-## 🗄️ Modelo de Dados
-
-### Relacionamentos
-
-```
-User (1) ──────── (N) Offer
-                       │
-                       ├──── (1:1) Metrics
-                       │
-                       └──── (1:N) AIReport
-
-Benchmark (Tabela independente para referências de mercado)
-```
-
-### Principais Entidades
-
-#### **User**
-
-Usuários do sistema (gestores e admins).
-
-| Campo        | Tipo    | Descrição                    |
-| ------------ | ------- | ---------------------------- |
-| id           | UUID    | Identificador único          |
-| email        | String  | Email (único)                |
-| passwordHash | String  | Senha hasheada (bcrypt)      |
-| name         | String  | Nome completo                |
-| role         | Enum    | ADMIN ou GESTOR              |
-| offers       | Offer[] | Ofertas criadas pelo usuário |
-
-#### **Offer**
-
-Campanhas de marketing cadastradas.
-
-| Campo         | Tipo       | Descrição                           |
-| ------------- | ---------- | ----------------------------------- |
-| id            | UUID       | Identificador único                 |
-| userId        | UUID       | Criador (FK → User)                 |
-| name          | String     | Nome da campanha                    |
-| niche         | String     | Nicho (saude, fitness, educacao...) |
-| country       | String     | País (BRA, USA, PRT...)             |
-| trafficSource | String     | Fonte de tráfego (Facebook Ads...)  |
-| funnelType    | String     | Tipo de funil (VSL, Webinar...)     |
-| startDate     | Date       | Data de início                      |
-| budget        | Decimal    | Orçamento (opcional)                |
-| status        | Enum       | ACTIVE, PAUSED, COMPLETED           |
-| metrics       | Metrics    | Métricas (relação 1:1)              |
-| reports       | AIReport[] | Relatórios de IA gerados            |
-
-#### **Metrics**
-
-Métricas de performance da oferta (relação 1:1 com Offer).
-
-| Campo          | Tipo    | Calculado? | Fórmula                        |
-| -------------- | ------- | ---------- | ------------------------------ |
-| impressions    | Int     | ❌         | -                              |
-| clicks         | Int     | ❌         | -                              |
-| ctr            | Decimal | ✅         | (clicks / impressions) × 100   |
-| cpc            | Decimal | ✅         | cost / clicks                  |
-| cpm            | Decimal | ✅         | (cost / impressions) × 1000    |
-| leads          | Int     | ❌         | -                              |
-| sales          | Int     | ❌         | -                              |
-| conversionRate | Decimal | ✅         | (sales / leads) × 100          |
-| revenue        | Decimal | ❌         | -                              |
-| cost           | Decimal | ❌         | -                              |
-| roas           | Decimal | ✅         | revenue / cost                 |
-| aov            | Decimal | ✅         | revenue / sales (Ticket Médio) |
-
-**Nota:** Métricas calculadas são geradas automaticamente pelo backend ao salvar/atualizar.
-
-#### **Benchmark**
-
-Referências de mercado por nicho, país e fonte.
-
-| Campo         | Tipo    | Descrição                      |
-| ------------- | ------- | ------------------------------ |
-| id            | UUID    | Identificador único            |
-| niche         | String  | Nicho de mercado               |
-| country       | String  | País                           |
-| trafficSource | String  | Fonte de tráfego               |
-| funnelType    | String  | Tipo de funil                  |
-| metricName    | String  | Nome da métrica (ctr, roas...) |
-| minValue      | Decimal | Valor mínimo aceitável         |
-| maxValue      | Decimal | Valor máximo esperado          |
-| idealValue    | Decimal | Valor ideal/meta               |
-| description   | String  | Contexto adicional             |
-
-**Constraint Único:** `(niche, country, trafficSource, funnelType, metricName)`
-
-#### **AIReport**
-
-Relatórios de análise gerados pela IA.
-
-| Campo                   | Tipo   | Descrição                                     |
-| ----------------------- | ------ | --------------------------------------------- |
-| id                      | UUID   | Identificador único                           |
-| offerId                 | UUID   | Oferta analisada (FK → Offer)                 |
-| summary                 | Text   | Resumo executivo                              |
-| validationStatus        | String | validated, not_validated, close_to_validation |
-| validationExplanation   | Text   | Explicação do status                          |
-| bottlenecks             | JSON   | Array de gargalos identificados               |
-| actionPlan              | JSON   | Array de ações recomendadas                   |
-| missingData             | JSON   | Array de dados faltantes                      |
-| nextTestRecommendations | Text   | Sugestões para próximo teste                  |
-| aiModel                 | String | Modelo usado (gemini-1.5-flash)               |
-| promptTokens            | Int    | Tokens do prompt                              |
-| completionTokens        | Int    | Tokens da resposta                            |
-
----
-
-## 🤖 Integração com Google Gemini
-
-### Como funciona
-
-1. **Contexto rico:** O backend monta um contexto completo com:
-   - Dados da oferta (nicho, país, funil)
-   - Métricas atuais de performance
-   - Benchmarks relevantes do mercado
-   - Histórico de ofertas similares
-
-2. **Prompt especializado:** Template otimizado para análise de marketing digital
-
-3. **Resposta estruturada:** IA retorna JSON com análise detalhada
-
-4. **Validação:** Backend valida a resposta com Zod antes de salvar
-
-### Modelo utilizado
-
-- **Recomendado:** `gemini-1.5-flash` (rápido e econômico)
-- **Alternativa:** `gemini-1.5-pro` (análises mais complexas)
-
-### Exemplo de análise gerada
-
-```json
-{
-  "summary": "A oferta apresentou ROAS de 4.5, acima do benchmark mínimo de 3.0...",
-  "validationStatus": "validated",
-  "bottlenecks": [
-    {
-      "stage": "traffic",
-      "metric": "ctr",
-      "current_value": 1.8,
-      "benchmark_value": 2.5,
-      "severity": "medium",
-      "explanation": "CTR ligeiramente abaixo do ideal..."
-    }
-  ],
-  "actionPlan": [
-    {
-      "priority": 1,
-      "action": "Realizar teste A/B com 3 variações de criativo...",
-      "expected_impact": "Aumentar CTR em 25-40%",
-      "difficulty": "easy"
-    }
-  ]
-}
-```
-
----
-
-## 🧪 Testando a API
-
-### 1. Criar usuário
-
-```bash
+1. **Registrar conta**
+```http
 POST /auth/register
 {
-  "email": "gestor@teste.com",
-  "password": "Senha123!",
+  "email": "gestor@exemplo.com",
+  "password": "SenhaSegura123!",
   "name": "João Silva"
 }
 ```
 
-### 2. Fazer login
-
-```bash
-POST /auth/signin
+2. **Fazer login**
+```http
+POST /auth/login
 {
-  "email": "gestor@teste.com",
-  "password": "Senha123!"
+  "email": "gestor@exemplo.com",
+  "password": "SenhaSegura123!"
 }
 ```
 
-### 3. Criar oferta
-
-```bash
+3. **Criar campanha**
+```http
 POST /offers
-Authorization: Bearer <seu-token>
+Authorization: Bearer {token}
 {
-  "name": "Campanha Emagrecimento",
-  "niche": "saude",
-  "country": "BRA",
-  "trafficSource": "Facebook Ads",
-  "funnelType": "VSL",
-  "startDate": "2024-02-01",
-  "budget": 5000
+  "name": "Black Friday 2024",
+  "niche": "ecommerce",
+  "country": "BR",
+  "trafficSource": "facebook",
+  "funnelType": "vsl"
 }
 ```
 
-### 4. Adicionar métricas
-
-```bash
-POST /offers/:offerId/metrics
-Authorization: Bearer <seu-token>
+4. **Registrar métricas**
+```http
+POST /offers/{offerId}/metrics
 {
   "impressions": 100000,
-  "clicks": 2000,
-  "leads": 500,
-  "sales": 45,
-  "revenue": 22500,
-  "cost": 5000
+  "clicks": 2500,
+  "leads": 450,
+  "sales": 67,
+  "revenue": 33500,
+  "cost": 8000
 }
 ```
 
-### 5. Gerar análise com IA
-
-```bash
-POST /offers/:offerId/analyze
-Authorization: Bearer <seu-token>
+5. **Gerar análise com IA**
+```http
+POST /offers/{offerId}/analyze
 ```
 
+A IA retorna análise estruturada incluindo:
+- Status de validação da campanha
+- Gargalos identificados por etapa do funil
+- Plano de ação priorizado
+- Comparação com benchmarks de mercado
+- Recomendações para próximos testes
+
+## Estrutura do projeto
+
+```
+src/
+├── auth/              # Autenticação e autorização
+├── offers/            # Gestão de campanhas
+├── metrics/           # Métricas de performance
+├── benchmarks/        # Referências de mercado
+├── ai/                # Análises geradas por IA
+└── prisma/            # Schema e migrations
+```
+
+## Modelo de dados
+
+O banco usa relacionamentos bem definidos:
+
+- **User** → tem muitas **Offers**
+- **Offer** → tem uma **Metrics** (1:1)
+- **Offer** → tem muitas **AIReports**
+- **Benchmarks** são globais (comparação de mercado)
+
+Métricas calculadas automaticamente:
+- CTR = (clicks / impressions) × 100
+- CPC = cost / clicks
+- CPM = (cost / impressions) × 1000
+- Conversion Rate = (sales / leads) × 100
+- ROAS = revenue / cost
+- AOV = revenue / sales
+
+## Como a análise com IA funciona
+
+1. Backend coleta dados da campanha + métricas + benchmarks relevantes
+2. Monta contexto estruturado (JSON) com histórico
+3. Envia para Google Gemini com prompt especializado
+4. IA retorna análise em formato estruturado
+5. Backend valida resposta com Zod e salva no banco
+6. Retorna relatório completo para o cliente
+
+Modelo usado: `gemini-2.5-flash` (rápido e econômico para análises)
+
+## Segurança
+
+- Senhas hasheadas com bcrypt (10 rounds)
+- Tokens JWT com expiração configurável
+- Validação de entrada em todas as rotas (Zod)
+- RBAC (Role-Based Access Control) para admins e gestores
+- SQL injection prevenido pelo Prisma ORM
+
+## Licença
+
+MIT
+
 ---
 
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Para contribuir:
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/NovaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
-4. Push para a branch (`git push origin feature/NovaFeature`)
-5. Abra um Pull Request
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT.
-
----
-
-## 👨‍💻 Autor
-
-**Seu Nome**
-
-- GitHub: [@marcosmvr](https://github.com/marcosmvr)
-- Email: marcosvr.dev@gmail.com
-
----
-
-## 🙏 Agradecimentos
-
-- [NestJS](https://nestjs.com/) pela framework incrível
-- [Prisma](https://www.prisma.io/) pelo ORM type-safe
-- [Google](https://ai.google.dev/) pela API do Gemini
-- [Supabase](https://supabase.com/) pelo PostgreSQL gerenciado
-
----
-
-<p align="center">
-  Feito com ❤️ por Marcos Dev
-</p>
+**Desenvolvido por Marcos Dev** • [GitHub](https://github.com/marcosmvr) • [Email](mailto:marcosvr.dev@gmail.com)
